@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.TicketMapper">
+    <insert id="insert">
+
+    </insert>
+    <select id="list" resultType="com.muc.pojo.Ticket">
+        select Ldate as date,Ltime as time,Hname as museum,(Lsale+Lleft) as total_tickets,Lsale as tickets_sold,Lleft as tickets_remain
+        from lefttickets join house
+        on lefttickets.Hno = house.Hno
+        <where>
+                Lleft>0
+            <if test="museum!=null and museum!='' ">
+                and Hname like concat('%',#{museum},'%')
+            </if>
+            <if test="date!=null">
+                and Ldate = #{date}
+            </if>
+            <if test="time!=null">
+                and Ltime = #{time}
+            </if>
+
+        </where>
+        order by Ldate desc
+
+    </select>
+
+</mapper>
