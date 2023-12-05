@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.BookTicketMapper">
+    <insert id="insertAudience">
+        insert into visitor
+        values
+            (
+                (select new_vno from (select max(CONVERT(vno, SIGNED)) as new_vno from visitor ) as a)+1,
+                #{name},
+                #{docType},
+                #{id}
+            );
+    </insert>
+    <insert id="insertOrder">
+        insert into orderform
+        values
+            (
+                (select new_ono from(select max(CONVERT(Ono,SIGNED)) as new_ono from orderform ) as a)+1,
+                #{orderTime},
+                #{visitDate},
+                #{visitTime},
+                0,
+                "待支付",
+                (select cno from customer where ctel =#{phone}),
+                0
+            );
+    </insert>
+    <insert id="insertBookTicket">
+        insert into bookticket
+        values
+            (
+                #{orderId},
+                #{audienceNo1},
+                #{museumTicketNo1},
+                ''
+            );
+    </insert>
+    <update id="updateStateAndPayment">
+        update orderform
+        set Ostate = "未使用",actualpayment=orderform.Ototalprice
+        where Ono=#{orderId,jdbcType=VARCHAR};
+    </update>
+    <select id="selectTicketNo" resultType="java.lang.String">
+        select Tno as id from ticket
+        where ticket.Hno=(select Hno from house where Hname=#{museum})
+        and ticket.Tseason=#{season}
+        and ticket.Ttype=#{type};
+    </select>
+    <select id="selectOrderId" resultType="java.lang.String">
+        select ono as order_id from orderform
+        where orderform.Otime = #{orderTime}
+        and orderform.Ovisitdate=#{visitDate}
+        and orderform.Cno=(select cno from customer where ctel =#{phone});
+    </select>
+
+    <select id="selectOtherTicketInfoByTime" resultType="com.muc.pojo.MuseumTicket">
+        select tno as id,Hname as museum,Ttype as type,Tseason as season,Tprice as price ,Lleft as remain from
+            (select tno,Hname,house.hno,Ttype,Tseason,Tprice
+             from house join ticket on house.hno=ticket.hno
+             where Ttype = #{type} and Tseason=#{season}) as a join lefttickets on a.hno = lefttickets.hno
+        where Ldate=#{visitDate} and Ltime=#{visitTime}
+        order by ttype;
+    </select>
+    <select id="getOrderedAudience" resultType="com.muc.pojo.Audience">
+        select vidnum as audience_no  from visitor
+        where vidnum=#{id}
+          and vno in (select vno from bookticket
+                      where Tno in (select tno from ticket where ticket.Hno in(select hno from house where hname='大门票')) and (state!='已退' or state is null) and ono in (select Ono from orderform
+                                                                                                                                                                             where Ovisitdate = #{visitDate}));
+
+    </select>
+
+</mapper>

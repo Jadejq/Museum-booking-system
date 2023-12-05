@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.AudienceMapper">
+
+    <select id="list" resultType="com.muc.pojo.Audience">
+        select Ovisitdate as date,Ovisittime as time,Vidtype as doc_type,Vidnum as id,Vname as name
+        from
+        (select Vidnum,Vidtype,Vname,Ono
+        from bookticket join visitor
+        <where>
+            visitor.Vno=bookticket.Vno
+            and Tno in (select Tno from ticket join house  where ticket.Hno=house.hno and Hname="大门票")
+            <if test="id!=null and id!='' ">
+                and Vidnum =#{id,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ) as a join orderform
+        <where>
+        a.ono=orderform.Ono
+           and ostate!='待支付'
+            <if test="date!=null">
+                and Ovisitdate = #{date}
+            </if>
+            <if test="time!=null and time!=''">
+                and Ovisittime = #{time}
+            </if>
+
+        </where>
+        order by Ovisitdate desc
+
+    </select>
+
+</mapper>

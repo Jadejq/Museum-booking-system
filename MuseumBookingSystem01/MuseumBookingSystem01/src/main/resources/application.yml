@@ -1,9 +1,40 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/museumbookingsystem
+    url: jdbc:mysql://127.0.0.1:3306/museumbookingsystem
     username: root
     password: zjq123
+#spring:
+#  datasource:
+#    user:
+#      url: jdbc:mysql://127.0.0.1:3306/museumbookingsystem
+#      jdbc-url: jdbc:mysql://127.0.0.1:3306/museumbookingsystem
+#      username: userA
+#      password: 000000
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#    admin:
+#      url: jdbc:mysql://127.0.0.1:3306/
+#      jdbc-url: jdbc:mysql://127.0.0.1:3306/museumbookingsystem
+#      username: userB
+#      password: 000000
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#    all:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://127.0.0.1:3306/museumbookingsystem
+#      jdbc-url: jdbc:mysql://127.0.0.1:3306/museumbookingsystem
+#      username: root
+#      password: zjq123
+#      mybatis:
+#        configuration:
+#          log-impl: STDOUT_LOGGING
+##      master:
+##        enabled: true
+#  jpa:
+#    hibernate:
+#      naming:
+#        strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
+
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

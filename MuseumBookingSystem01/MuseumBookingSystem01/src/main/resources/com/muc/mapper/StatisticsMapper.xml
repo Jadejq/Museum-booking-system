@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.StatisticsMapper">
+
+    <select id="selectStatisticTicketByMonth" resultType="com.muc.pojo.StatisticTickets">
+        SELECT
+        DATE_FORMAT(otime, '%Y-%m') AS time,
+        hname AS type,
+        COUNT(*) AS num
+        FROM
+        (select otime,Hname from (select otime,ticket.tno,hno from (select otime,orderform.ono,tno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+        join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+        WHERE otime >= #{start} AND otime &lt; #{end}
+        GROUP BY time, type
+        ORDER BY time, type;
+    </select>
+    <select id="selectStatisticTicketByMonthSum" resultType="com.muc.pojo.StatisticTickets">
+        select sum(num) as num,type
+        from
+            (
+                SELECT
+                    DATE_FORMAT(otime, '%Y-%m') AS time,
+                    hname AS type,
+                    COUNT(*) AS num
+                FROM
+                    (select otime,Hname from (select otime,ticket.tno,hno from (select otime,orderform.ono,tno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+                    join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+                WHERE otime >= #{start} AND otime &lt; #{end}
+                GROUP BY time, type
+                ORDER BY time, type
+            ) d
+            GROUP BY type
+            ORDER BY type;
+    </select>
+    <select id="selectStatisticTicketByDay" resultType="com.muc.pojo.StatisticTickets">
+        SELECT
+            DATE_FORMAT(otime, '%Y-%m-%d') AS time,
+        hname AS type,
+        COUNT(*) AS num
+        FROM
+            (select otime,Hname from (select otime,ticket.tno,hno from (select otime,orderform.ono,tno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+            join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+        WHERE otime >= #{start} AND otime &lt; #{end}
+        GROUP BY time, type
+        ORDER BY time, type;
+    </select>
+    <select id="selectStatisticTicketByDaySum" resultType="com.muc.pojo.StatisticTickets">
+        select sum(num) as num,type
+        from
+            (
+                SELECT
+                    DATE_FORMAT(otime, '%Y-%m-%d') AS time,
+                    hname AS type,
+                    COUNT(*) AS num
+                FROM
+                    (select otime,Hname from (select otime,ticket.tno,hno from (select otime,orderform.ono,tno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+                    join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+                WHERE otime >= #{start} AND otime &lt; #{end}
+                GROUP BY time, type
+                ORDER BY time, type
+            ) d
+        GROUP BY type
+        ORDER BY type;
+    </select>
+    <select id="selectStatisticTicketByYear" resultType="com.muc.pojo.StatisticTickets">
+        SELECT
+            DATE_FORMAT(otime, '%Y') AS time,
+        hname AS type,
+        COUNT(*) AS num
+        FROM
+            (select otime,Hname from (select otime,ticket.tno,hno from (select otime,orderform.ono,tno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+            join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+        WHERE otime >= #{start} AND otime &lt; #{end}
+        GROUP BY time, type
+        ORDER BY time, type;
+    </select>
+    <select id="selectStatisticTicketByYearSum" resultType="com.muc.pojo.StatisticTickets">
+        select sum(num) as num,type
+        from
+            (
+                SELECT
+                    DATE_FORMAT(otime, '%Y') AS time,
+                    hname AS type,
+                    COUNT(*) AS num
+                FROM
+                    (select otime,Hname from (select otime,ticket.tno,hno from (select otime,orderform.ono,tno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+                    join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+                WHERE otime >= #{start} AND otime &lt; #{end}
+                GROUP BY time, type
+                ORDER BY time, type
+            ) d
+        GROUP BY type
+        ORDER BY type;
+    </select>
+    <select id="selectStatisticPeopleByMonth" resultType="com.muc.pojo.StatisticTickets">
+        SELECT
+        DATE_FORMAT(otime, '%Y-%m') AS time,
+        Ttype as type,
+        COUNT(*) AS num
+        FROM
+        (select otime,Hname,vno,Ttype from (select otime,ticket.tno,hno,vno,ttype from (select otime,orderform.ono,tno,vno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+        join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+        WHERE otime >= #{start} AND otime  &lt; #{end} and Hname='大门票'
+        GROUP BY time,type
+        ORDER BY time;
+    </select>
+    <select id="selectStatisticPeopleByMonthSum" resultType="com.muc.pojo.StatisticTickets">
+        select sum(num) as num,type
+        from
+                (
+                    SELECT
+                        DATE_FORMAT(otime, '%Y-%m') AS time,
+                        Ttype as type,
+                        COUNT(*) AS num
+                    FROM
+                        (select otime,Hname,vno,Ttype from (select otime,ticket.tno,hno,vno,ttype from (select otime,orderform.ono,tno,vno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+                        join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+                    WHERE otime >= #{start} AND otime  &lt; #{end} and Hname='大门票'
+                    GROUP BY time,type
+                    ORDER BY time
+                ) d
+        GROUP BY type
+        ORDER BY type;
+    </select>
+    <select id="selectStatisticPeopleByDay" resultType="com.muc.pojo.StatisticTickets">
+        SELECT
+            DATE_FORMAT(otime, '%Y-%m-%d') AS time,
+        Ttype as type,
+        COUNT(*) AS num
+        FROM
+            (select otime,Hname,vno,Ttype from (select otime,ticket.tno,hno,vno,ttype from (select otime,orderform.ono,tno,vno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+            join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+        WHERE otime >= #{start} AND otime  &lt; #{end} and Hname='大门票'
+        GROUP BY time,type
+        ORDER BY time;
+    </select>
+    <select id="selectStatisticPeopleByDaySum" resultType="com.muc.pojo.StatisticTickets">
+        select sum(num) as num,type
+        from
+            (
+                SELECT
+                    DATE_FORMAT(otime, '%Y-%m-%d') AS time,
+                        Ttype as type,
+                        COUNT(*) AS num
+                FROM
+                    (select otime,Hname,vno,Ttype from (select otime,ticket.tno,hno,vno,ttype from (select otime,orderform.ono,tno,vno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+                    join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+                WHERE otime >= #{start} AND otime  &lt; #{end} and Hname='大门票'
+                GROUP BY time,type
+                ORDER BY time
+            ) d
+        GROUP BY type
+        ORDER BY type;
+    </select>
+    <select id="selectStatisticPeopleByYear" resultType="com.muc.pojo.StatisticTickets">
+        SELECT
+            DATE_FORMAT(otime, '%Y') AS time,
+        Ttype as type,
+        COUNT(*) AS num
+        FROM
+            (select otime,Hname,vno,Ttype from (select otime,ticket.tno,hno,vno,ttype from (select otime,orderform.ono,tno,vno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+            join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+        WHERE otime >= #{start} AND otime  &lt; #{end} and Hname='大门票'
+        GROUP BY time,type
+        ORDER BY time;
+    </select>
+    <select id="selectStatisticPeopleByYearSum" resultType="com.muc.pojo.StatisticTickets">
+        select sum(num) as num,type
+        from
+            (
+                SELECT
+                    DATE_FORMAT(otime, '%Y') AS time,
+                        Ttype as type,
+                        COUNT(*) AS num
+                FROM
+                    (select otime,Hname,vno,Ttype from (select otime,ticket.tno,hno,vno,ttype from (select otime,orderform.ono,tno,vno from orderform join bookticket on orderform.Ono=bookticket.Ono where state is null or state !='已退') a
+                    join ticket on ticket.tno=a.tno) as b join house on b.hno=house.hno) c
+                WHERE otime >= #{start} AND otime  &lt; #{end} and Hname='大门票'
+                GROUP BY time,type
+                ORDER BY time
+            ) d
+        GROUP BY type
+        ORDER BY type;
+    </select>
+    <select id="selectStatisticTurnover" resultType="com.muc.pojo.StatisticTurnover">
+        SELECT
+        DATE_FORMAT(otime, #{timeFormat,jdbcType=VARCHAR})  AS time,
+        IFNULL(SUM(actualpayment), 0) AS turnover
+        FROM orderform
+        WHERE otime >= #{start} AND otime &lt; #{end}
+        GROUP BY time
+        ORDER BY time;
+    </select>
+    <select id="selectStatisticTurnoverSum" resultType="com.muc.pojo.StatisticTurnover">
+        select sum(turnover) as turnover
+        from
+                (
+                    SELECT
+                        DATE_FORMAT(otime, #{timeFormat,jdbcType=VARCHAR})  AS time,
+                        IFNULL(SUM(actualpayment), 0) AS turnover
+                    FROM orderform
+                    WHERE otime >= #{start} AND otime &lt; #{end}
+                    GROUP BY time
+                    ORDER BY time
+
+                ) d
+        ;
+    </select>
+</mapper>

@@ -31,6 +31,8 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void add(Ticket ticket) {
+        ticket.setTicketsRemain(ticket.getTotalTickets());
+        ticket.setTicketsSold(0);
         ticketMapper.insert(ticket);
     }
 }

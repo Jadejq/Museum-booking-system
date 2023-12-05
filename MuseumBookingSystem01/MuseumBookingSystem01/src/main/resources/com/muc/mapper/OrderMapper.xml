@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.OrderMapper">
+
+    <update id="updateExpiredOrders">
+        -- SET SQL_SAFE_UPDATES = 0;
+        update orderform
+        set Ostate = "已过期"
+        where ovisitdate &lt; CURDATE() AND ostate in ('待支付','未使用');
+
+    </update>
+    <update id="updateTicketState">
+        update bookticket
+        set state = "已退"
+        where ono=#{orderId} and Vno =#{audienceNo}
+          <if test="id!='' and id!=null">
+          and Tno =#{id}
+          </if>
+        ;
+    </update>
+    <update id="updateRefundOrders">
+        -- SET SQL_SAFE_UPDATES = 0;
+        update orderform
+        set ostate = "退款/售后"
+        where ono=#{orderId};
+    </update>
+
+    <select id="searchOrderList" resultType="com.muc.pojo.Order">
+        select ono as order_id, Otime as order_time , ovisitdate as visit_date, Ovisittime as visit_time ,Ototalprice as total_price, Ostate as state
+        from orderform
+        <where>
+            Cno =  (select cno from customer where ctel =#{phone})
+          <if test="state!='' and state!=null">
+          and Ostate=#{state};
+          </if>
+        </where>
+    </select>
+    <select id="searchAudienceList" resultType="com.muc.pojo.Audience">
+        select Vname as name,Vidtype as docType,Vidnum as id,vno as audience_no from visitor
+        where vno in (select vno from bookticket where ono = #{orderId,jdbcType=VARCHAR});
+    </select>
+    <select id="searchMuseumTicketList" resultType="com.muc.pojo.MuseumTicket">
+        select House.hname as museum,ttype as type, tseason as season, tprice as price,a.tno as id,state
+        from
+            (select ttype, tseason, tprice,ticket.tno,state,hno from ticket join bookticket on ticket.Tno = bookticket.tno
+             where ono=#{orderId} and vno =#{audienceNo})a join house on house.hno = a.hno;
+
+    </select>
+    <select id="searchTicketName" resultType="java.lang.String">
+        select Hname from House join Ticket on ticket.Hno = house.Hno where Tno = #{id,jdbcType=VARCHAR};
+    </select>
+    <select id="getTicketState" resultType="java.lang.String">
+        select state from bookticket
+        where ono = #{orderId};
+    </select>
+    <select id="searchOrderDetail" resultType="com.muc.pojo.Order">
+        select ono as order_id, Otime as order_time , ovisitdate as visit_date, Ovisittime as visit_time ,Ototalprice as total_price, Ostate as state
+        from orderform
+        <where>
+            <if test="orderId!='' and orderId!=null">
+                ono=#{OderId};
+            </if>
+        </where>
+    </select>
+    <select id="selectOrderId" resultType="java.lang.String">
+        select ono as order_id
+        from orderform
+        where Cno =  (select cno from customer where ctel =#{phone}) and otime=#{orderTime};
+    </select>
+
+
+    <!--    <select id="getExpiredOrders" resultType="com.muc.pojo.Order">-->
+<!--        SELECT Ono as order_id-->
+<!--        FROM orders-->
+<!--        WHERE visit_time &lt; #{currentTime} AND status = '未使用'-->
+<!--    </select>-->
+</mapper>

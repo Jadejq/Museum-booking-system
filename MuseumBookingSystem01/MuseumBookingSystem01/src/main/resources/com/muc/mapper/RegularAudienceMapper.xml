@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.RegularAudienceMapper">
+
+
+    <insert id="insert">
+        insert into regularvisitor
+        values
+            (
+                    (select new_vno from(select max(CONVERT(vno, SIGNED)) as new_vno from regularvisitor ) as a)+1,
+                    #{name},
+                    #{docType},
+                    #{id},
+                    (select cno from customer where ctel =#{phone})
+
+            );
+    </insert>
+    <update id="update">
+        update regularvisitor
+        set
+        <if test="name != null and name != ''">
+            Vname = #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="docType != null and docType != ''">
+            Vidtype=#{docType,jdbcType=VARCHAR},
+        </if>
+        <if test="id != null and id != ''">
+            vidnum=#{id,jdbcType=VARCHAR}
+        </if>
+        where Cno=(select cno from customer where ctel =#{phone,jdbcType=VARCHAR}) and vno=#{regularAudienceNo,jdbcType=VARCHAR};
+    </update>
+    <select id="selectByPhoneAndId" resultType="com.muc.pojo.RegularAudience">
+        select Vname as name ,VidType as doc_type,Vidnum as id,Vno as regular_audience_no
+        from regularvisitor
+        where Cno=( select Cno from customer where Ctel=#{phone}) and Vidnum = #{id};
+    </select>
+
+</mapper>

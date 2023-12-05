@@ -1,7 +1,6 @@
 package com.muc.mapper;
 
-
-import com.muc.pojo.Ticket;
+import com.muc.pojo.Audience;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +13,6 @@ import java.util.List;
  */
 @Mapper
 //@Repository
-
-public interface TicketMapper {
-    List<Ticket> list(LocalDate date, String time, String museum);
-    void insert(Ticket ticket);
+public interface AudienceMapper {
+    List<Audience> list(LocalDate date, String time, String id) ;
 }

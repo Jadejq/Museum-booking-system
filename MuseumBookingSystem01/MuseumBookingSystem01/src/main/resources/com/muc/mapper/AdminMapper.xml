@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.muc.mapper.AdminMapper">
+
+
+    <select id="getByIdAndPassword" resultType="com.muc.pojo.Admin">
+        select Mno as id,Mpsw as password from manager
+        where mno = #{id} and mpsw = #{password};
+    </select>
+</mapper>
