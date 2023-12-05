@@ -1,0 +1,55 @@
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+--
+-- Host: localhost    Database: museumbookingsystem
+-- ------------------------------------------------------
+-- Server version	8.0.32
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `regularvisitor`
+--
+
+DROP TABLE IF EXISTS `regularvisitor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `regularvisitor` (
+  `Vno` char(20) NOT NULL,
+  `Vname` varchar(30) NOT NULL,
+  `Vidtype` enum('身份证','港澳居民来往内地通行证','护照','台湾居民来往大陆通行证','港澳台居民居住证','外国人永久居住身份证') NOT NULL,
+  `Vidnum` varchar(20) NOT NULL,
+  `Cno` char(15) NOT NULL,
+  PRIMARY KEY (`Vno`),
+  KEY `Vidnum_index` (`Vidnum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `regularvisitor`
+--
+
+LOCK TABLES `regularvisitor` WRITE;
+/*!40000 ALTER TABLE `regularvisitor` DISABLE KEYS */;
+INSERT INTO `regularvisitor` VALUES ('00000000000000000002','刘冰','身份证','110101200301010101','10000000002'),('00000000000000000003','谢婷','身份证','310101200301010101','10000000003'),('00000000000000000004','张一','身份证','210101200301010103','10000000001'),('00000000000000000005','张二','身份证','110101200301010104','10000000001'),('00000000000000000006','李四','身份证','310101200301010105','10000000003'),('1','王七','台湾居民来往大陆通行证','111111199905060606','10000000001'),('11','观众1','身份证','120120198803020601','10000000006'),('12','观众2','身份证','120120198803020602','10000000006'),('13','观众3','身份证','120120198803020603','10000000006'),('14','观众123','身份证','1345467878979','10000000007'),('15','观众124','身份证','1345467878978','10000000007'),('16','testupdate','护照','1588978786','10000000008'),('17','张三','身份证','1234567','100123'),('18','李四','身份证','3456789','100123'),('2','张三','身份证','210411200102020123','10000000001'),('3','张三','身份证','210411200102020123','10000000001'),('4','小朱','身份证','210101200101010101','100123'),('5','abc修改','港澳居民来往内地通行证','210116101010101010','100123'),('6','李娜','身份证','101010200101010401','10000000004'),('7','嘻嘻','身份证','101010199901010202','10000000005'),('8','余弦','身份证','101010199901020202','10000000005'),('9','时钟','身份证','101010199901020203','10000000005');
+/*!40000 ALTER TABLE `regularvisitor` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-12-05  8:24:44
